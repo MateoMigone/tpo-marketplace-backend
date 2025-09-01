@@ -18,7 +18,7 @@ public class Cart {
 
     @OneToMany (mappedBy = "cart")
     private List<CartDetail> cartDetails;
-
+//asdasdasdasdasdasdsadasda
     @Column
     private LocalDate date;
 
