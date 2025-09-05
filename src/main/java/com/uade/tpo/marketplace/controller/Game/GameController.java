@@ -28,8 +28,16 @@ public class GameController {
     private GameService GameService;
 
     @PostMapping
-    public ResponseEntity<Game> createGame(@RequestBody Game game) {
-        Game createdGame = GameService.createGame(game);
+    public ResponseEntity<Game> createGame(@RequestBody GameRequest gameRequest) {
+        Game createdGame = GameService.createGame(
+            gameRequest.getTitle(),
+            gameRequest.getPrice(),
+            gameRequest.getType(),
+            gameRequest.getPlatform(),
+            gameRequest.getCategories(),
+            gameRequest.getImageUrl(),
+            gameRequest.getStock()
+        );
         return ResponseEntity.ok(createdGame);
     }
 

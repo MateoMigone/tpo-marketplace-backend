@@ -24,7 +24,15 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
-    public Game createGame(Game game) {
+    public Game createGame(String title, Double price, String type, String platform, List categories, String imageUrl, Integer stock) {
+        Game game = new Game();
+        game.setTitle(title);
+        game.setPrice(price);
+        game.setType(type);
+        game.setPlatform(platform);
+        game.setCategories(categories);
+        game.setImageUrl(imageUrl);
+        game.setStock(stock);
         return gameRepository.save(game);
     }
 
