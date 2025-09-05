@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.service;
 
+import com.uade.tpo.marketplace.entity.Role;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +29,7 @@ public class AuthenticationService {
                                 .lastName(request.getLastname())
                                 .email(request.getEmail())
                                 .password(passwordEncoder.encode(request.getPassword()))
-                                .role(request.getRole())
+                                .role(Role.USER)
                                 .build();
 
                 repository.save(user);

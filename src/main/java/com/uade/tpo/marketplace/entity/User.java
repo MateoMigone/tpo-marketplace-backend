@@ -25,8 +25,6 @@ public class User implements UserDetails {
 
     private String email;
 
-    private String name;
-
     private String password;
 
     private String firstName;
@@ -37,8 +35,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.USER;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

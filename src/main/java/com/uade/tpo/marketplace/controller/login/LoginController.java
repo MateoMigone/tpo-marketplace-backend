@@ -11,7 +11,6 @@ import com.uade.tpo.marketplace.service.LoginService;
 
 @Controller
 public class LoginController {
-    
 
     @Autowired
     private LoginService loginService;
