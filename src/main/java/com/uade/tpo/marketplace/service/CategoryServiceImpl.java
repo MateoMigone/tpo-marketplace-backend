@@ -25,4 +25,17 @@ public class CategoryServiceImpl implements CategoryService{
         //List<Category> categories = categoryRepository.findByName(name);
             return categoryRepository.save(new Category(name));
     }
+
+    @SuppressWarnings("override")
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
+    }
+
+     @SuppressWarnings("override")
+    public Category editGame(Long id, Category categoryDetails) {
+        return categoryRepository.findById(id).map(category -> {
+            category.setName(categoryDetails.getName());
+            return categoryRepository.save(category);
+        }).orElse(null);
+    }
 }
