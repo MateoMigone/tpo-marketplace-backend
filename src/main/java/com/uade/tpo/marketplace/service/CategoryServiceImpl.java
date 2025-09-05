@@ -15,10 +15,12 @@ public class CategoryServiceImpl implements CategoryService{
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @SuppressWarnings("override")
     public Page<Category> getCategories(PageRequest pageable) {
         return categoryRepository.findAll(pageable);
     }
 
+    @SuppressWarnings("override")
     public Category createCategory(String name) {
         //List<Category> categories = categoryRepository.findByName(name);
             return categoryRepository.save(new Category(name));

@@ -43,9 +43,12 @@ public class GameController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Game> editGame(@PathVariable Long id, @RequestBody Game game) {
-        return GameService.editGame(id, game)
-                .map(updatedGame -> ResponseEntity.ok(updatedGame))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        Game updatedGame = GameService.editGame(id, game);
+        if (updatedGame != null) {
+            return ResponseEntity.ok(updatedGame);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -55,8 +58,8 @@ public class GameController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Game>> getAllVideoGames() {
-        List<Game> videoGames = GameService.getAllGames();
-        return ResponseEntity.ok(videoGames);
+    public ResponseEntity<List<Game>> getAllGames() {
+        List<Game> Games = GameService.getAllGames();
+        return ResponseEntity.ok(Games);
     }
 }

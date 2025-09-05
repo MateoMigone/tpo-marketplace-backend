@@ -5,51 +5,18 @@
 
 package com.uade.tpo.marketplace.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.uade.tpo.marketplace.entity.Game;
-import com.uade.tpo.marketplace.repository.GameRepository;
 
 /**
  *
  * @author juanb
  */
-@Service
-public class GameService {
 
-    @Autowired
-    private GameRepository gameRepository;
+public interface GameService {
 
-    public Game createGame(String title, Double price, String type, String platform, List categories, String imageUrl, Integer stock) {
-        Game game = new Game();
-        game.setTitle(title);
-        game.setPrice(price);
-        game.setType(type);
-        game.setPlatform(platform);
-        game.setCategories(categories);
-        game.setImageUrl(imageUrl);
-        game.setStock(stock);
-        return gameRepository.save(game);
-    }
-
-    public Optional<Game> editGame(Long id,Game gameDetails) {
-        return gameRepository.findById(id).map(Game -> {
-            Game.setTitle(gameDetails.getTitle());
-            Game.setCategories(gameDetails.getCategories());
-            return gameRepository.save(Game);
-        });
-    }
-
-    public void deleteGame(Long id) {
-        gameRepository.deleteById(id);
-    }
-
-    public List<Game> getAllGames() {
-        return gameRepository.findAll();
-    }
+    public Game createGame(String title, Double price, String type, String platform, java.util.List categories, String imageUrl, Integer stock);
+    public Game editGame(Long id,Game gameDetails);
+    public void deleteGame(Long id);
+    public java.util.List<Game> getAllGames();
 
 }
