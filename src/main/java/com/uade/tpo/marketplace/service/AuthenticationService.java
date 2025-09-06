@@ -1,6 +1,8 @@
 package com.uade.tpo.marketplace.service;
 
 import com.uade.tpo.marketplace.entity.Role;
+import com.uade.tpo.marketplace.entity.Wishlist;
+import com.uade.tpo.marketplace.repository.WishlistRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,10 +17,13 @@ import com.uade.tpo.marketplace.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashSet;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-        private final UserRepository repository;
+        private final UserRepository userRepository;
+        private final WishlistRepository wishlistRepository;
         private final PasswordEncoder passwordEncoder;
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
@@ -32,7 +37,12 @@ public class AuthenticationService {
                                 .role(Role.USER)
                                 .build();
 
-                repository.save(user);
+                var wishlist = Wishlist.builder()
+                                .gameList(new HashSet<>())
+                                .build();
+
+                userRepository.save(user);
+                wishlistRepository.save(wishlist);
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
@@ -45,7 +55,7 @@ public class AuthenticationService {
                                                 request.getEmail(),
                                                 request.getPassword()));
 
-                var user = repository.findByEmail(request.getEmail())
+                var user = userRepository.findByEmail(request.getEmail())
                                 .orElseThrow();
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()

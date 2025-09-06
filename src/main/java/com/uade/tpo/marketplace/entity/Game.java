@@ -26,15 +26,14 @@ public class Game {
     private Double price;
 
     @Column
-    private String type;
-
-    @Column
     private Integer stock;
 
     @Column
     private String platform;
+
     @Column
     private String imageUrl;
+
     @ManyToMany
     @JoinTable(name = "game_category", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories;

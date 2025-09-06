@@ -1,20 +1,25 @@
 package com.uade.tpo.marketplace.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
-public class WishlistItem {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Wishlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "game_id")
-    private Game game;
+    @ManyToMany
+    @JoinTable(name = "gameList", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
+    private Set<Game> gameList = new HashSet<>();
 }

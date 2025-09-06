@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.uade.tpo.marketplace.controller.Game;
+package com.uade.tpo.marketplace.controller.game;
 
 import java.util.List;
 

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.uade.tpo.marketplace.controller.Game;
+package com.uade.tpo.marketplace.controller.game;
 
 import java.util.List;
 
@@ -14,7 +14,6 @@ public class GameRequest {
     private Long id;
     private String title;
     private Double price;
-    private String type;
     private String platform;
     private String imageUrl;
     private Integer stock;

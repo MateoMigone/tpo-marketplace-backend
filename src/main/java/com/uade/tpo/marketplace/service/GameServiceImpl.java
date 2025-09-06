@@ -7,9 +7,8 @@ package com.uade.tpo.marketplace.service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
-import com.uade.tpo.marketplace.controller.Game.GameRequest;
+import com.uade.tpo.marketplace.controller.game.GameRequest;
 import com.uade.tpo.marketplace.entity.Category;
 import com.uade.tpo.marketplace.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,6 @@ public class GameServiceImpl implements GameService {
         Game game = new Game();
         game.setTitle(gameRequest.getTitle());
         game.setPrice(gameRequest.getPrice());
-        game.setType(gameRequest.getType());
         game.setPlatform(gameRequest.getPlatform());
         game.setCategories(categories);
         game.setImageUrl(gameRequest.getImageUrl());
@@ -67,7 +65,6 @@ public class GameServiceImpl implements GameService {
         return gameRepository.findById(id).map(game -> {
             game.setTitle(gameRequest.getTitle());
             game.setPrice(gameRequest.getPrice());
-            game.setType(gameRequest.getType());
             game.setPlatform(gameRequest.getPlatform());
             game.setCategories(categories);
             game.setImageUrl(gameRequest.getImageUrl());

@@ -5,7 +5,7 @@
 
 package com.uade.tpo.marketplace.service;
 
-import com.uade.tpo.marketplace.controller.Game.GameRequest;
+import com.uade.tpo.marketplace.controller.game.GameRequest;
 import com.uade.tpo.marketplace.entity.Game;
 
 /**
