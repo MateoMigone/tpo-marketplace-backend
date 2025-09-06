@@ -32,7 +32,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
      @SuppressWarnings("override")
-    public Category editGame(Long id, Category categoryDetails) {
+    public Category editCategory(Long id, Category categoryDetails) {
         return categoryRepository.findById(id).map(category -> {
             category.setName(categoryDetails.getName());
             return categoryRepository.save(category);
