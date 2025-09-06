@@ -7,8 +7,6 @@ package com.uade.tpo.marketplace.controller.Game;
 
 import java.util.List;
 
-import com.uade.tpo.marketplace.entity.Category;
-
 import lombok.Data;
 
 @Data
@@ -20,5 +18,5 @@ public class GameRequest {
     private String platform;
     private String imageUrl;
     private Integer stock;
-    private List<Category> categories;
+    private List<Long> categoriesIds;
 }

@@ -5,6 +5,7 @@
 
 package com.uade.tpo.marketplace.service;
 
+import com.uade.tpo.marketplace.controller.Game.GameRequest;
 import com.uade.tpo.marketplace.entity.Game;
 
 /**
@@ -14,8 +15,8 @@ import com.uade.tpo.marketplace.entity.Game;
 
 public interface GameService {
 
-    public Game createGame(String title, Double price, String type, String platform, java.util.List categories, String imageUrl, Integer stock);
-    public Game editGame(Long id,Game gameDetails);
+    public Game createGame(GameRequest gameRequest);
+    public Game editGame(Long id,GameRequest gameRequest);
     public void deleteGame(Long id);
     public java.util.List<Game> getAllGames();
 

@@ -29,25 +29,17 @@ import com.uade.tpo.marketplace.service.GameService;
 @RequestMapping("games")
 public class GameController {
     @Autowired
-    private GameService GameService;
+    private GameService gameService;
 
     @PostMapping
     public ResponseEntity<Game> createGame(@RequestBody GameRequest gameRequest) {
-        Game createdGame = GameService.createGame(
-            gameRequest.getTitle(),
-            gameRequest.getPrice(),
-            gameRequest.getType(),
-            gameRequest.getPlatform(),
-            gameRequest.getCategories(),
-            gameRequest.getImageUrl(),
-            gameRequest.getStock()
-        );
-        return ResponseEntity.ok(createdGame);
+        Game result = gameService.createGame(gameRequest);
+        return ResponseEntity.ok(result);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Game> editGame(@PathVariable Long id, @RequestBody Game game) {
-        Game updatedGame = GameService.editGame(id, game);
+    public ResponseEntity<Game> editGame(@PathVariable Long id, @RequestBody GameRequest gameRequest) {
+        Game updatedGame = gameService.editGame(id, gameRequest);
         if (updatedGame != null) {
             return ResponseEntity.ok(updatedGame);
         } else {
@@ -57,13 +49,13 @@ public class GameController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGame(@PathVariable Long id) {
-        GameService.deleteGame(id);
+        gameService.deleteGame(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
     public ResponseEntity<List<Game>> getAllGames() {
-        List<Game> Games = GameService.getAllGames();
+        List<Game> Games = gameService.getAllGames();
         return ResponseEntity.ok(Games);
     }
 }

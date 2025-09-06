@@ -2,11 +2,13 @@ package com.uade.tpo.marketplace.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Category {
 
     public Category(String name) {
@@ -19,7 +21,4 @@ public class Category {
 
     @Column
     private String name;
-
-    @ManyToMany(mappedBy = "categories")
-    private List<Game> games;
 }

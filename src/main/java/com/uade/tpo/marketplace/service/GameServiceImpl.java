@@ -5,8 +5,13 @@
 
 package com.uade.tpo.marketplace.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
+import com.uade.tpo.marketplace.controller.Game.GameRequest;
+import com.uade.tpo.marketplace.entity.Category;
+import com.uade.tpo.marketplace.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,34 +27,57 @@ public class GameServiceImpl implements GameService {
 
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @SuppressWarnings("override")
-    public Game createGame(String title, Double price, String type, String platform, List categories, String imageUrl, Integer stock) {
+    public Game createGame(GameRequest gameRequest) {
+        HashSet<Long> requestedIds = new HashSet<>(gameRequest.getCategoriesIds());
+        HashSet<Category> categories = new HashSet<>(categoryRepository.findAllById(requestedIds));
+
+
+        if (categories.size() != requestedIds.size()) {
+            throw new IllegalArgumentException("Alguna de las categorías es inexistente");
+        }
+
         Game game = new Game();
-        game.setTitle(title);
-        game.setPrice(price);
-        game.setType(type);
-        game.setPlatform(platform);
+        game.setTitle(gameRequest.getTitle());
+        game.setPrice(gameRequest.getPrice());
+        game.setType(gameRequest.getType());
+        game.setPlatform(gameRequest.getPlatform());
         game.setCategories(categories);
-        game.setImageUrl(imageUrl);
-        game.setStock(stock);
+        game.setImageUrl(gameRequest.getImageUrl());
+        game.setStock(gameRequest.getStock());
+
         return gameRepository.save(game);
     }
 
     @SuppressWarnings("override")
-    public Game editGame(Long id, Game gameDetails) {
+    public Game editGame(Long id, GameRequest gameRequest) {
+
+
+        HashSet<Long> requestedIds = new HashSet<>(gameRequest.getCategoriesIds());
+        HashSet<Category> categories = new HashSet<>(categoryRepository.findAllById(requestedIds));
+
+
+        if (categories.size() != requestedIds.size()) {
+            throw new IllegalArgumentException("Alguna de las categorías es inexistente");
+        }
+
         return gameRepository.findById(id).map(game -> {
-            game.setTitle(gameDetails.getTitle());
-            game.setPrice(gameDetails.getPrice());
-            game.setType(gameDetails.getType());
-            game.setPlatform(gameDetails.getPlatform());
-            game.setCategories(gameDetails.getCategories());
-            game.setImageUrl(gameDetails.getImageUrl());
-            game.setStock(gameDetails.getStock());
-            
+            game.setTitle(gameRequest.getTitle());
+            game.setPrice(gameRequest.getPrice());
+            game.setType(gameRequest.getType());
+            game.setPlatform(gameRequest.getPlatform());
+            game.setCategories(categories);
+            game.setImageUrl(gameRequest.getImageUrl());
+            game.setStock(gameRequest.getStock());
+
             return gameRepository.save(game);
         }).orElse(null);
+
     }
+
 
     @SuppressWarnings("override")
     public void deleteGame(Long id) {

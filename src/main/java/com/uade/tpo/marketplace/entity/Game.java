@@ -1,6 +1,6 @@
 package com.uade.tpo.marketplace.entity;
 
-import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,5 +37,5 @@ public class Game {
     private String imageUrl;
     @ManyToMany
     @JoinTable(name = "game_category", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<Category> categories;
+    private Set<Category> categories;
 }
