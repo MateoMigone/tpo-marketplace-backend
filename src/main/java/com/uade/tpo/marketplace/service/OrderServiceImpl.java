@@ -26,8 +26,7 @@ public class OrderServiceImpl implements OrderService {
         order.setDate(dateTime);
         order.setTotalPrice(orderRequest.getTotalPrice());
         order.setAddress(orderRequest.getAddress());
-        order.setPayment(null);
-        order.setOrderDetails(null);
+        order.setOrderDetails(orderRequest.getOrderDetails());
 
         orderRepository.save(order);
 
@@ -37,8 +36,7 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setDate(dateTime);
         orderResponse.setTotalPrice(orderRequest.getTotalPrice());
         orderResponse.setAddress(orderRequest.getAddress());
-        orderResponse.setPayment(null);
-        orderResponse.setOrderDetailResponses(null);
+        orderResponse.setOrderDetailRequests(null);
 
         return orderResponse;
     }

@@ -26,9 +26,6 @@ public class Order {
     @Column
     private String address;
 
-    @OneToOne(mappedBy = "order")
-    private Payment payment;
-
     @OneToMany (mappedBy = "order")
     private List<OrderDetail> orderDetails;
 }

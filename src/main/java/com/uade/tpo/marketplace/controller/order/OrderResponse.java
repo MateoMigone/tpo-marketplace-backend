@@ -17,7 +17,5 @@ public class OrderResponse {
 
     private String address;
 
-    private String payment;
-
-    private List<OrderDetailResponse> orderDetailResponses;
+    private List<OrderDetailRequest> orderDetailRequests;
 }
