@@ -21,7 +21,7 @@ public class AdminController {
             @PathVariable Long userId,
             @RequestParam String nuevoRol) {
 
-        userService.cambiarRolUsuario(userId, nuevoRol.toUpperCase());
+        userService.cambiarRolUser(userId, nuevoRol.toUpperCase());
         return ResponseEntity.ok("Rol actualizado correctamente");
     }
 }
