@@ -2,7 +2,7 @@ package com.uade.tpo.marketplace.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -15,16 +15,19 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Long userId;
 
     @Column
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column
     private Double totalPrice;
 
     @Column
-    private String address;
+    private boolean paid;
+
+    @OneToOne(mappedBy = "order")
+    private Delivery delivery;
 
     @OneToOne(mappedBy = "order")
     private Payment payment;
