@@ -4,5 +4,8 @@ import lombok.Data;
 
 @Data
 public class OrderRequest {
+
     private Double totalPrice;
+
+    private String address;
 }

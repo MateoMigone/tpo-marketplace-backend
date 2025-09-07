@@ -26,6 +26,9 @@ public class Game {
     private Double price;
 
     @Column
+    private Double discount;
+
+    @Column
     private Integer stock;
 
     @Column
@@ -37,4 +40,6 @@ public class Game {
     @ManyToMany
     @JoinTable(name = "game_category", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories;
+
+
 }
