@@ -41,4 +41,8 @@ public class Game {
     @JoinTable(name = "game_category", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories;
 
+    public Double getFinalPrice (){
+        return price - (price * discount);
+    }
+
 }
