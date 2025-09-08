@@ -82,4 +82,11 @@ public class GameController {
         }
     }
 
+    // Buscar juegos por nombre (ej: "Zelda" o "Call of Duty")
+    // Ejemplo: GET /api/v1/games/nombre?nombre=Zelda
+    @GetMapping("/nombre")
+    public ResponseEntity<List<Game>> getGamesByTitle(@RequestParam String title) {
+        return ResponseEntity.ok(gameService.findByTitle(title));
+    }
+
 }

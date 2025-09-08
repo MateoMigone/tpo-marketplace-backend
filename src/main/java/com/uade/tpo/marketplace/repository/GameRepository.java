@@ -31,4 +31,10 @@ public interface GameRepository extends JpaRepository<Game, Long>{
 
     // Buscar juegos con precio mayor o igual a un valor
     List<Game> findByPriceGreaterThanEqual(Double precio);
+
+    // Buscar por coincidencia exacta
+    List<Game> findByTitle(String title);
+
+    // Buscar ignorando mayúsculas/minúsculas y permitiendo coincidencias parciales
+    List<Game> findBytitleContainingIgnoreCase(String title);
 }

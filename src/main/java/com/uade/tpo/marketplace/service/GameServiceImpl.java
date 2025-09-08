@@ -108,4 +108,8 @@ public class GameServiceImpl implements GameService {
         return gameRepository.findByPriceGreaterThanEqual(min);
     }
 
+    public List<Game> findByTitle(String title) {
+        return gameRepository.findByTitleContainingIgnoreCase(title);
+    }
+
 }
