@@ -63,4 +63,30 @@ public class GameController {
         List<Game> games = gameService.getGamesByCategory(name);
         return ResponseEntity.ok(games);
     }
+
+    // Buscar por rango de precios
+    // Ej: GET /api/v1/games/precio?rangoMin=20&rangoMax=80
+    @GetMapping("/precio")
+    public ResponseEntity<List<Game>> getGamesByPrice(
+            @RequestParam(required = false) Double rangeMin,
+            @RequestParam(required = false) Double rangeMax) {
+
+        if (rangeMin != null && rangeMax != null) {
+            return ResponseEntity.ok(gameService.findByRangePrice(rangeMin, rangeMax));
+        } else if (rangeMax != null) {
+            return ResponseEntity.ok(gameService.findByPriceMax(rangeMax));
+        } else if (rangeMin != null) {
+            return ResponseEntity.ok(gameService.findByPriceMin(rangeMin));
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // Buscar juegos por nombre (ej: "Zelda" o "Call of Duty")
+    // Ejemplo: GET /api/v1/games/nombre?nombre=Zelda
+    @GetMapping("/nombre")
+    public ResponseEntity<List<Game>> getGamesByTitle(@RequestParam String title) {
+        return ResponseEntity.ok(gameService.findByTitle(title));
+    }
+
 }

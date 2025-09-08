@@ -95,5 +95,23 @@ public class GameServiceImpl implements GameService {
         return gameRepository.findByCategories_Name(name);
     }
 
+    //Override
+    public List<Game> findByRangePrice(Double min, Double max) {
+        return gameRepository.findByPrecioBetween(min, max);
+    }
+
+    //@Override
+    public List<Game> findByPriceMax(Double max) {
+        return gameRepository.findByPriceLessThanEqual(max);
+    }
+
+    //@Override
+    public List<Game> findByPriceMin(Double min) {
+        return gameRepository.findByPriceGreaterThanEqual(min);
+    }
+
+    public List<Game> findByTitle(String title) {
+        return gameRepository.findByTitleContainingIgnoreCase(title);
+    }
 
 }
