@@ -21,5 +21,8 @@ public interface GameService {
     public java.util.List<Game> getAllGames();
     public java.util.List<Game> getAllAvailableGames();
     public java.util.List<Game> getGamesByCategory(String category);
+    public java.util.List<Game> findByRangePrice(Double min, Double max);
+    public java.util.List<Game> findByPriceMax(Double max);
+    public java.util.List<Game> findByPriceMin(Double min);
 
 }
