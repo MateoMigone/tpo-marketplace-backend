@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.uade.tpo.marketplace.controller.game.GameRequest;
+import com.uade.tpo.marketplace.controller.order.OrderDetailRequest;
 import com.uade.tpo.marketplace.entity.Category;
 import com.uade.tpo.marketplace.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,14 @@ public class GameServiceImpl implements GameService {
     @SuppressWarnings("override")
     public List<Game> getAllGames() {
         return gameRepository.findAll();
+    }
+
+    public List<Game> getAllAvailableGames() {
+        return gameRepository.findByStockGreaterThan(0);
+    }
+
+    public List<Game> getGamesByCategory(String name) {
+        return gameRepository.findByCategories_Name(name);
     }
 
 

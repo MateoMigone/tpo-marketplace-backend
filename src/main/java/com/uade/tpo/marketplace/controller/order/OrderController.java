@@ -1,6 +1,7 @@
 package com.uade.tpo.marketplace.controller.order;
 
 import com.uade.tpo.marketplace.entity.User;
+import com.uade.tpo.marketplace.exceptions.NoStockAvailableException;
 import com.uade.tpo.marketplace.repository.UserRepository;
 import com.uade.tpo.marketplace.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class OrderController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Object> createOrder(Authentication auth,@RequestBody OrderRequest orderRequest){
+    public ResponseEntity<Object> createOrder(Authentication auth,@RequestBody OrderRequest orderRequest) throws NoStockAvailableException {
         String email = auth.getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("Usuario no encontrado"));

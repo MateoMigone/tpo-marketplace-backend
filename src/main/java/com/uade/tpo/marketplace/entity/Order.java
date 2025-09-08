@@ -3,6 +3,7 @@ package com.uade.tpo.marketplace.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,7 +12,7 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -26,6 +27,19 @@ public class Order {
     @Column
     private String address;
 
-    @OneToMany (mappedBy = "order")
-    private List<OrderDetail> orderDetails;
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<OrderDetail> orderDetails = new ArrayList<>();
+
+    public void addOrderDetail(OrderDetail d) {
+        orderDetails.add(d);
+        d.setOrder(this);
+    }
+    public void removeOrderDetail(OrderDetail d) {
+        orderDetails.remove(d);
+        d.setOrder(null);
+    }
 }

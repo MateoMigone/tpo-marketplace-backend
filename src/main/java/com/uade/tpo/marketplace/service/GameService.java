@@ -19,5 +19,7 @@ public interface GameService {
     public Game editGame(Long id,GameRequest gameRequest);
     public void deleteGame(Long id);
     public java.util.List<Game> getAllGames();
+    public java.util.List<Game> getAllAvailableGames();
+    public java.util.List<Game> getGamesByCategory(String category);
 
 }

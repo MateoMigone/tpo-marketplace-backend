@@ -9,14 +9,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.uade.tpo.marketplace.entity.Game;
 import com.uade.tpo.marketplace.service.GameService;
@@ -55,7 +48,19 @@ public class GameController {
 
     @GetMapping
     public ResponseEntity<List<Game>> getAllGames() {
-        List<Game> Games = gameService.getAllGames();
-        return ResponseEntity.ok(Games);
+        List<Game> games = gameService.getAllGames();
+        return ResponseEntity.ok(games);
+    }
+
+    @GetMapping("/available")
+    public ResponseEntity<List<Game>> getAllAvailableGames() {
+        List<Game> games = gameService.getAllAvailableGames();
+        return ResponseEntity.ok(games);
+    }
+
+    @GetMapping("/by-category")
+    public ResponseEntity<List<Game>> getGamesByCategory(@RequestParam String name) {
+        List<Game> games = gameService.getGamesByCategory(name);
+        return ResponseEntity.ok(games);
     }
 }

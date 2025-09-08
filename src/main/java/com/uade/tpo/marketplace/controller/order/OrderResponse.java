@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class OrderResponse {
-    private Integer id;
+    private Long id;
 
     private String email;
 
@@ -17,5 +17,5 @@ public class OrderResponse {
 
     private String address;
 
-    private List<OrderDetailRequest> orderDetailRequests;
+    private List<OrderDetailResponse> orderDetailResponses;
 }
