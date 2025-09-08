@@ -14,6 +14,7 @@ public class GameRequest {
     private Long id;
     private String title;
     private Double price;
+    private Double discount;
     private String platform;
     private String imageUrl;
     private Integer stock;

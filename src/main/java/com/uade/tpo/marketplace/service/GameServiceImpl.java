@@ -39,6 +39,7 @@ public class GameServiceImpl implements GameService {
         Game game = new Game();
         game.setTitle(gameRequest.getTitle());
         game.setPrice(gameRequest.getPrice());
+        game.setDiscount(gameRequest.getDiscount());
         game.setPlatform(gameRequest.getPlatform());
         game.setCategories(categories);
         game.setImageUrl(gameRequest.getImageUrl());
@@ -63,6 +64,7 @@ public class GameServiceImpl implements GameService {
         return gameRepository.findById(id).map(game -> {
             game.setTitle(gameRequest.getTitle());
             game.setPrice(gameRequest.getPrice());
+            game.setDiscount(gameRequest.getDiscount());
             game.setPlatform(gameRequest.getPlatform());
             game.setCategories(categories);
             game.setImageUrl(gameRequest.getImageUrl());
