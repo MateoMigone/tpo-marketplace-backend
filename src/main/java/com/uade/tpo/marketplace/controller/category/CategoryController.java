@@ -36,7 +36,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(page, size)));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest) throws CategoryDuplicateException {
         Category result = categoryService.createCategory(categoryRequest.getName());
         return ResponseEntity.created(URI.create("/categories/" + result.getId())).body(result);

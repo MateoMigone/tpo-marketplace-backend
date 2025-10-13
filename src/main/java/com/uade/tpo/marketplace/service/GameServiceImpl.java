@@ -5,7 +5,12 @@ import java.util.List;
 
 import com.uade.tpo.marketplace.controller.game.GameRequest;
 import com.uade.tpo.marketplace.entity.Category;
+import com.uade.tpo.marketplace.exceptions.InvalidDiscountException;
+import com.uade.tpo.marketplace.exceptions.NegativePriceException;
+import com.uade.tpo.marketplace.exceptions.NegativeStockException;
 import com.uade.tpo.marketplace.repository.CategoryRepository;
+import com.uade.tpo.marketplace.utils.InfoValidator;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +29,23 @@ public class GameServiceImpl implements GameService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @SuppressWarnings("override")
-    public Game createGame(GameRequest gameRequest) {
+    @Transactional
+    public Game createGame(GameRequest gameRequest) throws NegativeStockException, InvalidDiscountException, NegativePriceException {
+        // Validamos que el stock sea un numero válido
+        if (!InfoValidator.isValidStock(gameRequest.getStock())){
+            throw new NegativeStockException();
+        }
+
+        // Validamos que el precio sea un numero válido
+        if (!InfoValidator.isValidPrice(gameRequest.getPrice())){
+            throw new NegativePriceException();
+        }
+
+        // Validamos que el descuento sea un numero válido
+        if (!InfoValidator.isValidDiscount(gameRequest.getDiscount())){
+            throw new InvalidDiscountException();
+        }
+
         //Buscamos las categorias que se le quieren asignar al nuevo juego
         HashSet<Long> requestedIds = new HashSet<>(gameRequest.getCategoriesIds());
         HashSet<Category> categories = new HashSet<>(categoryRepository.findAllById(requestedIds));
@@ -49,8 +69,23 @@ public class GameServiceImpl implements GameService {
         return gameRepository.save(game);
     }
 
-    @SuppressWarnings("override")
-    public Game editGame(Long id, GameRequest gameRequest) {
+    @Transactional
+    public Game editGame(Long id, GameRequest gameRequest) throws NegativeStockException, NegativePriceException, InvalidDiscountException {
+        // Validamos que el stock sea un numero válido
+        if (!InfoValidator.isValidStock(gameRequest.getStock())){
+            throw new NegativeStockException();
+        }
+
+        // Validamos que el precio sea un numero válido
+        if (!InfoValidator.isValidPrice(gameRequest.getPrice())){
+            throw new NegativePriceException();
+        }
+
+        // Validamos que el descuento sea un numero válido
+        if (!InfoValidator.isValidDiscount(gameRequest.getDiscount())){
+            throw new InvalidDiscountException();
+        }
+
         //Buscamos las categorias que se le quieren asignar al juego
         HashSet<Long> requestedIds = new HashSet<>(gameRequest.getCategoriesIds());
         HashSet<Category> categories = new HashSet<>(categoryRepository.findAllById(requestedIds));
@@ -97,7 +132,7 @@ public class GameServiceImpl implements GameService {
 
     //Override
     public List<Game> findByRangePrice(Double min, Double max) {
-        return gameRepository.findByPrecioBetween(min, max);
+        return gameRepository.findByPriceBetween(min, max);
     }
 
     //@Override

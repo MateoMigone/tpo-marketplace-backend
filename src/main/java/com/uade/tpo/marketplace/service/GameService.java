@@ -7,6 +7,9 @@ package com.uade.tpo.marketplace.service;
 
 import com.uade.tpo.marketplace.controller.game.GameRequest;
 import com.uade.tpo.marketplace.entity.Game;
+import com.uade.tpo.marketplace.exceptions.InvalidDiscountException;
+import com.uade.tpo.marketplace.exceptions.NegativePriceException;
+import com.uade.tpo.marketplace.exceptions.NegativeStockException;
 
 /**
  *
@@ -15,8 +18,8 @@ import com.uade.tpo.marketplace.entity.Game;
 
 public interface GameService {
 
-    public Game createGame(GameRequest gameRequest);
-    public Game editGame(Long id,GameRequest gameRequest);
+    public Game createGame(GameRequest gameRequest) throws NegativeStockException, InvalidDiscountException, NegativePriceException;
+    public Game editGame(Long id,GameRequest gameRequest) throws NegativeStockException, NegativePriceException, InvalidDiscountException;
     public void deleteGame(Long id);
     public java.util.List<Game> getAllGames();
     public java.util.List<Game> getAllAvailableGames();

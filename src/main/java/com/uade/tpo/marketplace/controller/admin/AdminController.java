@@ -1,10 +1,13 @@
 package com.uade.tpo.marketplace.controller.admin;
 
+import com.uade.tpo.marketplace.entity.Game;
 import com.uade.tpo.marketplace.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -23,5 +26,11 @@ public class AdminController {
 
         userService.cambiarRolUser(userId, changeRoleRequest.getNuevoRol().toUpperCase());
         return ResponseEntity.ok("Rol actualizado correctamente");
+    }
+
+    @GetMapping("/usuarios")
+    public ResponseEntity<List<AdminUserResponse>> getAllUsers() {
+        List<AdminUserResponse> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 }

@@ -1,5 +1,7 @@
 package com.uade.tpo.marketplace.controller.auth;
 
+import com.uade.tpo.marketplace.exceptions.EmailException;
+import com.uade.tpo.marketplace.exceptions.PasswordException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +21,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request) {
+            @RequestBody RegisterRequest request) throws PasswordException, EmailException {
         return ResponseEntity.ok(service.register(request));
     }
 

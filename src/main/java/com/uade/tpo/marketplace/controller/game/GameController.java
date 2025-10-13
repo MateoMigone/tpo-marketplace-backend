@@ -7,6 +7,9 @@ package com.uade.tpo.marketplace.controller.game;
 
 import java.util.List;
 
+import com.uade.tpo.marketplace.exceptions.InvalidDiscountException;
+import com.uade.tpo.marketplace.exceptions.NegativePriceException;
+import com.uade.tpo.marketplace.exceptions.NegativeStockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,14 +27,14 @@ public class GameController {
     @Autowired
     private GameService gameService;
 
-    @PostMapping
-    public ResponseEntity<Game> createGame(@RequestBody GameRequest gameRequest) {
+    @PostMapping("/admin/create")
+    public ResponseEntity<Game> createGame(@RequestBody GameRequest gameRequest) throws NegativeStockException, InvalidDiscountException, NegativePriceException {
         Game result = gameService.createGame(gameRequest);
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Game> editGame(@PathVariable Long id, @RequestBody GameRequest gameRequest) {
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<Game> editGame(@PathVariable Long id, @RequestBody GameRequest gameRequest) throws NegativeStockException, InvalidDiscountException, NegativePriceException {
         Game updatedGame = gameService.editGame(id, gameRequest);
         if (updatedGame != null) {
             return ResponseEntity.ok(updatedGame);
@@ -40,43 +43,43 @@ public class GameController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Void> deleteGame(@PathVariable Long id) {
         gameService.deleteGame(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping("/admin")
     public ResponseEntity<List<Game>> getAllGames() {
         List<Game> games = gameService.getAllGames();
         return ResponseEntity.ok(games);
     }
 
-    @GetMapping("/available")
+    @GetMapping("/get/available")
     public ResponseEntity<List<Game>> getAllAvailableGames() {
         List<Game> games = gameService.getAllAvailableGames();
         return ResponseEntity.ok(games);
     }
 
-    @GetMapping("/by-category")
+    @GetMapping("/get/category")
     public ResponseEntity<List<Game>> getGamesByCategory(@RequestParam String name) {
         List<Game> games = gameService.getGamesByCategory(name);
         return ResponseEntity.ok(games);
     }
 
     // Buscar por rango de precios
-    // Ej: GET /api/v1/games/precio?rangoMin=20&rangoMax=80
-    @GetMapping("/precio")
+    // Ej: GET /api/v1/games/precio?min=20&max=80
+    @GetMapping("/get/price")
     public ResponseEntity<List<Game>> getGamesByPrice(
-            @RequestParam(required = false) Double rangeMin,
-            @RequestParam(required = false) Double rangeMax) {
+            @RequestParam(required = false) Double min,
+            @RequestParam(required = false) Double max) {
 
-        if (rangeMin != null && rangeMax != null) {
-            return ResponseEntity.ok(gameService.findByRangePrice(rangeMin, rangeMax));
-        } else if (rangeMax != null) {
-            return ResponseEntity.ok(gameService.findByPriceMax(rangeMax));
-        } else if (rangeMin != null) {
-            return ResponseEntity.ok(gameService.findByPriceMin(rangeMin));
+        if (min != null && max != null) {
+            return ResponseEntity.ok(gameService.findByRangePrice(min, max));
+        } else if (max != null) {
+            return ResponseEntity.ok(gameService.findByPriceMax(max));
+        } else if (min != null) {
+            return ResponseEntity.ok(gameService.findByPriceMin(min));
         } else {
             return ResponseEntity.badRequest().build();
         }
@@ -84,7 +87,7 @@ public class GameController {
 
     // Buscar juegos por nombre (ej: "Zelda" o "Call of Duty")
     // Ejemplo: GET /api/v1/games/nombre?nombre=Zelda
-    @GetMapping("/nombre")
+    @GetMapping("/get/title")
     public ResponseEntity<List<Game>> getGamesByTitle(@RequestParam String title) {
         return ResponseEntity.ok(gameService.findByTitle(title));
     }

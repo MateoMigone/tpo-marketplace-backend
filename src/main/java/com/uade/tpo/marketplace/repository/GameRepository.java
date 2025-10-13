@@ -25,7 +25,7 @@ public interface GameRepository extends JpaRepository<Game, Long>{
     List<Game> findByCategories_Name(String name);
 
     // Buscar por rango de precios
-    List<Game> findByPrecioBetween(Double min, Double max);
+    List<Game> findByPriceBetween(Double min, Double max);
     // Buscar juegos con precio menor o igual a un valor
     List<Game> findByPriceLessThanEqual(Double precio);
 
@@ -36,5 +36,5 @@ public interface GameRepository extends JpaRepository<Game, Long>{
     List<Game> findByTitle(String title);
 
     // Buscar ignorando mayúsculas/minúsculas y permitiendo coincidencias parciales
-    List<Game> findBytitleContainingIgnoreCase(String title);
+    List<Game> findByTitleContainingIgnoreCase(String title);
 }

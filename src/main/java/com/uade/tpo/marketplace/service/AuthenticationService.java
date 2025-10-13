@@ -2,7 +2,10 @@ package com.uade.tpo.marketplace.service;
 
 import com.uade.tpo.marketplace.entity.Role;
 import com.uade.tpo.marketplace.entity.Wishlist;
+import com.uade.tpo.marketplace.exceptions.EmailException;
+import com.uade.tpo.marketplace.exceptions.PasswordException;
 import com.uade.tpo.marketplace.repository.WishlistRepository;
+import com.uade.tpo.marketplace.utils.InfoValidator;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,10 +31,18 @@ public class AuthenticationService {
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
 
-        public AuthenticationResponse register(RegisterRequest request) {
+        public AuthenticationResponse register(RegisterRequest request) throws PasswordException, EmailException {
+                boolean isValidPassword = InfoValidator.isValidPassword(request.getPassword(), request.getPasswordRepeat());
+                boolean isValidEmail = InfoValidator.isValidEmail(request.getEmail());
+                if (!isValidPassword){
+                        throw new PasswordException();
+                }
+                if (!isValidEmail){
+                        throw new EmailException();
+                }
                 var user = User.builder()
-                                .firstName(request.getFirstname())
-                                .lastName(request.getLastname())
+                                .firstName(request.getFirstName())
+                                .lastName(request.getLastName())
                                 .email(request.getEmail())
                                 .password(passwordEncoder.encode(request.getPassword()))
                                 .role(Role.USER)
