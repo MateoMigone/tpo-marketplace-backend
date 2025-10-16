@@ -5,6 +5,9 @@
 
 package com.uade.tpo.marketplace.controller.game;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import com.uade.tpo.marketplace.exceptions.InvalidDiscountException;
@@ -13,9 +16,11 @@ import com.uade.tpo.marketplace.exceptions.NegativeStockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.uade.tpo.marketplace.entity.Game;
 import com.uade.tpo.marketplace.service.GameService;
+
 
 /**
  *
@@ -90,6 +95,47 @@ public class GameController {
     @GetMapping("/get/title")
     public ResponseEntity<List<Game>> getGamesByTitle(@RequestParam String title) {
         return ResponseEntity.ok(gameService.findByTitle(title));
+    }
+
+    @PostMapping("/admin/create-with-image")
+    public ResponseEntity<?> createGameWithImage(
+            @RequestParam("title") String title,
+            @RequestParam("price") Double price,
+            @RequestParam("stock") Integer stock,
+            @RequestParam("platform") String platform,
+            @RequestParam("categoriesIds") List<Long> categoriesIds,
+            @RequestParam("imagen") MultipartFile imagen
+    ) {
+        try {
+            // 1️⃣ Guardar imagen en carpeta local
+            String uploadDir = "uploads/";
+            Files.createDirectories(Paths.get(uploadDir));
+
+            String fileName = System.currentTimeMillis() + "_" + imagen.getOriginalFilename();
+            Path filePath = Paths.get(uploadDir + fileName);
+            Files.write(filePath, imagen.getBytes());
+
+            // 2️⃣ Crear URL pública
+            String imagenUrl = "http://localhost:8080/uploads/" + fileName;
+
+            // 3️⃣ Crear GameRequest
+            GameRequest gameRequest = new GameRequest();
+            gameRequest.setTitle(title);
+            gameRequest.setPrice(price);
+            gameRequest.setStock(stock);
+            gameRequest.setPlatform(platform);
+            gameRequest.setImageUrl(imagenUrl);
+            gameRequest.setCategoriesIds(categoriesIds);
+
+            // 4️⃣ Llamar al servicio existente
+            Game result = gameService.createGame(gameRequest);
+
+            return ResponseEntity.ok(result);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body("Error al crear el videojuego: " + e.getMessage());
+        }
     }
 
 }
