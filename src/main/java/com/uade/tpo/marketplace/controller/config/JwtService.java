@@ -28,11 +28,17 @@ public class JwtService {
     private String buildToken(
             UserDetails userDetails,
             long expiration) {
+
+        String userRole = userDetails.getAuthorities().stream()
+                .findFirst() // Suponemos un solo rol por ahora
+                .map(Object::toString)
+                .orElse("USER"); // Default si no se encuentra
+
         return Jwts
                 .builder()
                 .subject(userDetails.getUsername()) // prueba@hotmail.com
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .claim("Grupo5", 12345)
+                .claim("role", userRole)
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSecretKey())
                 .compact();
