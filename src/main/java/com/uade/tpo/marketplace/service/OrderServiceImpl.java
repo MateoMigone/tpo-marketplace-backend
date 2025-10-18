@@ -11,7 +11,7 @@ import com.uade.tpo.marketplace.entity.User;
 import com.uade.tpo.marketplace.exceptions.NoStockAvailableException;
 import com.uade.tpo.marketplace.repository.GameRepository;
 import com.uade.tpo.marketplace.repository.OrderRepository;
-import com.uade.tpo.marketplace.repository.UserRepository; // <-- Importación necesaria
+import com.uade.tpo.marketplace.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors; // <-- Importación necesaria
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -31,12 +31,11 @@ public class OrderServiceImpl implements OrderService {
     private GameRepository gameRepository;
 
     @Autowired
-    private UserRepository userRepository; // <-- Dependencia necesaria
+    private UserRepository userRepository;
 
     @Override
     @Transactional
     public OrderResponse createOrder(User user, OrderRequest orderRequest) throws NoStockAvailableException {
-        // Tu método original para crear una orden (no necesita cambios, está perfecto)
         LocalDateTime dateTime = LocalDateTime.now();
         Order order = new Order();
         order.setUser(user);
@@ -92,23 +91,18 @@ public class OrderServiceImpl implements OrderService {
         return orderResponse;
     }
 
-    // --- NUEVO MÉTODO AÑADIDO ---
     @Override
     public List<OrderResponse> getOrdersByUserEmail(String email) {
-        // 1. Busca al usuario por su email
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("Usuario no encontrado"));
 
-        // 2. Busca todas las órdenes de ese usuario
         List<Order> orders = orderRepository.findByUser(user);
         
-        // 3. Convierte la lista de entidades `Order` a una lista de `OrderResponse` (DTOs)
         return orders.stream()
                 .map(this::convertToOrderResponse)
                 .collect(Collectors.toList());
     }
     
-    // --- MÉTODO PRIVADO AUXILIAR PARA LA CONVERSIÓN ---
     private OrderResponse convertToOrderResponse(Order order) {
         OrderResponse response = new OrderResponse();
         response.setId(order.getId());
@@ -117,8 +111,8 @@ public class OrderServiceImpl implements OrderService {
         response.setTotalPrice(order.getTotalPrice());
         response.setAddress(order.getAddress());
         
-        // Mapea los detalles de la orden (los items comprados)
-        List<OrderDetailResponse> detailResponses = order.getOrderDetail().stream()
+        // CORRECCIÓN FINAL: Se cambió getOrderDetail() a getOrderDetails() (plural)
+        List<OrderDetailResponse> detailResponses = order.getOrderDetails().stream()
                 .map(detail -> {
                     OrderDetailResponse detailResponse = new OrderDetailResponse();
                     detailResponse.setGameId(detail.getGame().getId());
