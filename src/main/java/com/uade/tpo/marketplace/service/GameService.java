@@ -21,6 +21,7 @@ public interface GameService {
     public Game createGame(GameRequest gameRequest) throws NegativeStockException, InvalidDiscountException, NegativePriceException;
     public Game editGame(Long id,GameRequest gameRequest) throws NegativeStockException, NegativePriceException, InvalidDiscountException;
     public void deleteGame(Long id);
+    public Game getGameById(Long id);
     public java.util.List<Game> getAllGames();
     public java.util.List<Game> getAllAvailableGames();
     public java.util.List<Game> getGamesByCategory(String category);
