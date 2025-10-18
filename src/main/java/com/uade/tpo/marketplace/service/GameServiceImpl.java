@@ -149,4 +149,9 @@ public class GameServiceImpl implements GameService {
         return gameRepository.findByTitleContainingIgnoreCase(title);
     }
 
+    @Override
+      public Game getGameById(Long id) {
+      return gameRepository.findById(id).orElse(null);
+}
+
 }
