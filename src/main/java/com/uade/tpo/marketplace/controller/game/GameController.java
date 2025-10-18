@@ -38,6 +38,12 @@ public class GameController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Game> getGameById(@PathVariable Long id) {
+      Game game = gameService.getGameById(id); 
+      return ResponseEntity.ok(game);
+}
+
     @PutMapping("/admin/{id}")
     public ResponseEntity<Game> editGame(@PathVariable Long id, @RequestBody GameRequest gameRequest) throws NegativeStockException, InvalidDiscountException, NegativePriceException {
         Game updatedGame = gameService.editGame(id, gameRequest);
