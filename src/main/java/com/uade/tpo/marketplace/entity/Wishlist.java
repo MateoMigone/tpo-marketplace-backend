@@ -19,7 +19,17 @@ public class Wishlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
-    @JoinTable(name = "gameList", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
+    // --- BLOQUE DE CÓDIGO AÑADIDO ---
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+    // --- FIN DEL BLOQUE AÑADIDO ---
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "wishlist_games", 
+        joinColumns = @JoinColumn(name = "wishlist_id"), 
+        inverseJoinColumns = @JoinColumn(name = "game_id")
+    )
     private Set<Game> gameList = new HashSet<>();
 }
