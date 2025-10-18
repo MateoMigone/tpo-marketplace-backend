@@ -25,6 +25,7 @@ public class Wishlist {
     private User user;
     // --- FIN DEL BLOQUE AÑADIDO ---
 
+    @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "wishlist_games", 
