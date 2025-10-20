@@ -39,6 +39,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/categories/**").hasAnyAuthority(Role.ADMIN.name())
                                                 .requestMatchers("/games/admin/**").hasAnyAuthority(Role.ADMIN.name())
                                                 .requestMatchers("/games/get/**").permitAll()
+                                                .requestMatchers("/uploads/**").permitAll()
                                                 .requestMatchers("/wishlist/**").hasAnyAuthority(Role.USER.name())
                                                 .requestMatchers("/order/**").hasAnyAuthority(Role.USER.name())
                                                 .requestMatchers("/api/v1/admin/**").hasAnyAuthority(Role.ADMIN.name())

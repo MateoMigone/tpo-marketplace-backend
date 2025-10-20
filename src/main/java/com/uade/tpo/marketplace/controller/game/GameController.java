@@ -121,12 +121,16 @@ public class GameController {
             String uploadDir = "uploads/";
             Files.createDirectories(Paths.get(uploadDir));
 
-            String fileName = System.currentTimeMillis() + "_" + imagen.getOriginalFilename();
+            String originalName = imagen.getOriginalFilename();
+            // Reemplazar caracteres peligrosos por guión bajo y evitar espacios en blanco
+            String safeOriginal = (originalName == null) ? "file" : originalName.replaceAll("[^a-zA-Z0-9._-]", "_");
+            String fileName = System.currentTimeMillis() + "_" + safeOriginal;
             Path filePath = Paths.get(uploadDir + fileName);
             Files.write(filePath, imagen.getBytes());
 
-            // 2️⃣ Crear URL pública
-            String imagenUrl = "http://localhost:4002/uploads/" + fileName;
+            // 2️⃣ Crear URL pública (URL-encode filename para que espacios y caracteres especiales no rompan la URL)
+            String encoded = java.net.URLEncoder.encode(fileName, java.nio.charset.StandardCharsets.UTF_8.toString()).replace("+", "%20");
+            String imagenUrl = "http://localhost:4002/uploads/" + encoded;
 
             // 3️⃣ Crear GameRequest
             GameRequest gameRequest = new GameRequest();
@@ -145,6 +149,40 @@ public class GameController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
                     .body("Error al crear el videojuego: " + e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/admin/{id}/edit-with-image", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> editGameWithImage(
+        @PathVariable Long id,
+        @org.springframework.web.bind.annotation.RequestPart("game") String gameJson,
+        @org.springframework.web.bind.annotation.RequestPart("image") MultipartFile image
+    ) {
+        try {
+            // Guardar imagen en carpeta local (mismo comportamiento que create-with-image)
+            String uploadDir = "uploads/";
+            Files.createDirectories(Paths.get(uploadDir));
+
+            String originalName = image.getOriginalFilename();
+            String safeOriginal = (originalName == null) ? "file" : originalName.replaceAll("[^a-zA-Z0-9._-]", "_");
+            String fileName = System.currentTimeMillis() + "_" + safeOriginal;
+            Path filePath = Paths.get(uploadDir + fileName);
+            Files.write(filePath, image.getBytes());
+
+            String encoded = java.net.URLEncoder.encode(fileName, java.nio.charset.StandardCharsets.UTF_8.toString()).replace("+", "%20");
+            String imageUrl = "http://localhost:4002/uploads/" + encoded;
+
+            // Parsear gameJson a GameRequest
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            GameRequest gameRequest = mapper.readValue(gameJson, GameRequest.class);
+            gameRequest.setImageUrl(imageUrl);
+
+            Game updated = gameService.editGame(id, gameRequest);
+            if (updated != null) return ResponseEntity.ok(updated);
+            return ResponseEntity.notFound().build();
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al editar el videojuego: " + e.getMessage());
         }
     }
 
