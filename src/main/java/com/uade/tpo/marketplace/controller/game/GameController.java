@@ -138,6 +138,10 @@ public class GameController {
             gameRequest.setPrice(price);
             gameRequest.setStock(stock);
             gameRequest.setPlatform(platform);
+            // Asegurar un valor por defecto para discount si no fue enviado
+            if (gameRequest.getDiscount() == null) {
+                gameRequest.setDiscount(0.0);
+            }
             gameRequest.setImageUrl(imagenUrl);
             gameRequest.setCategoriesIds(categoriesIds);
 
@@ -175,6 +179,10 @@ public class GameController {
             // Parsear gameJson a GameRequest
             com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
             GameRequest gameRequest = mapper.readValue(gameJson, GameRequest.class);
+            // Asegurar un valor por defecto para discount si no fue enviado
+            if (gameRequest.getDiscount() == null) {
+                gameRequest.setDiscount(0.0);
+            }
             gameRequest.setImageUrl(imageUrl);
 
             Game updated = gameService.editGame(id, gameRequest);
