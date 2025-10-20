@@ -42,6 +42,16 @@ public class CategoryController {
         return ResponseEntity.created(URI.create("/categories/" + result.getId())).body(result);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
+        Category category = categoryService.getCategoryById(id);
+        if (category != null) {
+            return ResponseEntity.ok(category);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Category> editCategory(@PathVariable Long id, @RequestBody Category category) {
         Category updatedCategory = categoryService.editCategory(id, category);

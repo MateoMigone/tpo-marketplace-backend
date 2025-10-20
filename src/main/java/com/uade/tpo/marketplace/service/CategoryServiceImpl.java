@@ -1,6 +1,7 @@
 package com.uade.tpo.marketplace.service;
 
 
+import com.uade.tpo.marketplace.entity.Game;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,13 @@ public class CategoryServiceImpl implements CategoryService{
     @SuppressWarnings("override")
     public Page<Category> getCategories(PageRequest pageable) {
         return categoryRepository.findAll(pageable);
+    }
+
+    @Override
+    public Category getCategoryById(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada: " + id));
+        return category;
     }
 
     @SuppressWarnings("override")

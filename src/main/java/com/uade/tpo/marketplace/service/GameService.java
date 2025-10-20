@@ -17,7 +17,7 @@ import com.uade.tpo.marketplace.exceptions.NegativeStockException;
  */
 
 public interface GameService {
-
+    public Game getGameById(Long id);
     public Game createGame(GameRequest gameRequest) throws NegativeStockException, InvalidDiscountException, NegativePriceException;
     public Game editGame(Long id,GameRequest gameRequest) throws NegativeStockException, NegativePriceException, InvalidDiscountException;
     public void deleteGame(Long id);

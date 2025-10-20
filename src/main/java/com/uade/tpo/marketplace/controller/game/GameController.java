@@ -38,6 +38,16 @@ public class GameController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Game> getGameById(@PathVariable Long id)  {
+        Game game = gameService.getGameById(id);
+        if (game != null) {
+            return ResponseEntity.ok(game);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PutMapping("/admin/{id}")
     public ResponseEntity<Game> editGame(@PathVariable Long id, @RequestBody GameRequest gameRequest) throws NegativeStockException, InvalidDiscountException, NegativePriceException {
         Game updatedGame = gameService.editGame(id, gameRequest);
@@ -116,7 +126,7 @@ public class GameController {
             Files.write(filePath, imagen.getBytes());
 
             // 2️⃣ Crear URL pública
-            String imagenUrl = "http://localhost:8080/uploads/" + fileName;
+            String imagenUrl = "http://localhost:4002/uploads/" + fileName;
 
             // 3️⃣ Crear GameRequest
             GameRequest gameRequest = new GameRequest();

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.uade.tpo.marketplace.controller.game.GameRequest;
 import com.uade.tpo.marketplace.entity.Category;
+import com.uade.tpo.marketplace.entity.Wishlist;
 import com.uade.tpo.marketplace.exceptions.InvalidDiscountException;
 import com.uade.tpo.marketplace.exceptions.NegativePriceException;
 import com.uade.tpo.marketplace.exceptions.NegativeStockException;
@@ -28,6 +29,13 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Override
+    public Game getGameById(Long id) {
+        Game game = gameRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Juego no encontrado: " + id));
+        return game;
+    }
 
     @Transactional
     public Game createGame(GameRequest gameRequest) throws NegativeStockException, InvalidDiscountException, NegativePriceException {

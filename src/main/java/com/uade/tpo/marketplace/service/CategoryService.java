@@ -9,6 +9,8 @@ import com.uade.tpo.marketplace.entity.Category;
 public interface CategoryService {
     public Page<Category> getCategories(PageRequest pageRequest);
 
+    public Category getCategoryById(Long id);
+
     public Category createCategory(String name);
 
     public Category editCategory(Long id, Category category);
