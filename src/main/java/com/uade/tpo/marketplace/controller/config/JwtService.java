@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
+
+import com.uade.tpo.marketplace.entity.User;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -29,6 +31,9 @@ public class JwtService {
             UserDetails userDetails,
             long expiration) {
 
+        User user = (User) userDetails;
+        Long userId = user.getId();
+
         String userRole = userDetails.getAuthorities().stream()
                 .findFirst() // Suponemos un solo rol por ahora
                 .map(Object::toString)
@@ -39,6 +44,7 @@ public class JwtService {
                 .subject(userDetails.getUsername()) // prueba@hotmail.com
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .claim("role", userRole)
+                .claim("userId",userId)
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSecretKey())
                 .compact();
