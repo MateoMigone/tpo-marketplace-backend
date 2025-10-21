@@ -7,4 +7,5 @@ import com.uade.tpo.marketplace.exceptions.NoStockAvailableException;
 
 public interface OrderService {
     public OrderResponse createOrder(User user, OrderRequest orderRequest) throws NoStockAvailableException;
+    public java.util.List<OrderResponse> getOrdersForUser(User user);
 }

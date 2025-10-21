@@ -26,6 +26,35 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Override
+    public java.util.List<OrderResponse> getOrdersForUser(User user) {
+        java.util.List<com.uade.tpo.marketplace.entity.Order> orders = orderRepository.findByUserIdOrderByDateDesc(user.getId());
+        java.util.List<OrderResponse> responses = new java.util.ArrayList<>();
+
+        for (com.uade.tpo.marketplace.entity.Order order : orders) {
+            OrderResponse resp = new OrderResponse();
+            resp.setId(order.getId());
+            resp.setEmail(order.getUser().getEmail());
+            resp.setDate(order.getDate());
+            resp.setTotalPrice(order.getTotalPrice());
+            resp.setAddress(order.getAddress());
+
+            java.util.List<OrderDetailResponse> details = new java.util.ArrayList<>();
+            for (com.uade.tpo.marketplace.entity.OrderDetail od : order.getOrderDetails()) {
+                OrderDetailResponse d = new OrderDetailResponse();
+                Integer rawGameId = od.getGame() != null ? od.getGame().getId() : null;
+                d.setGameId(rawGameId != null ? rawGameId.longValue() : null);
+                d.setQuantity(od.getQuantity());
+                d.setUnitPrice(od.getUnitPrice());
+                details.add(d);
+            }
+            resp.setOrderDetailResponses(details);
+            responses.add(resp);
+        }
+
+        return responses;
+    }
+
     @Autowired
     private GameRepository gameRepository;
 
