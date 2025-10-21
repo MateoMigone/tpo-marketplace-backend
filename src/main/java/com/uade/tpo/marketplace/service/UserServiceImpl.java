@@ -42,14 +42,17 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public UserResponse actualizarUser(String email, UserRequest request) throws EmailException {
-        boolean isValidEmail = InfoValidator.isValidEmail(request.getEmail());
-        if (!isValidEmail){
-            throw new EmailException();
+        // Validate email only if provided (allow partial updates)
+        if (request.getEmail() != null) {
+            boolean isValidEmail = InfoValidator.isValidEmail(request.getEmail());
+            if (!isValidEmail) {
+                throw new EmailException();
+            }
         }
 
-        UserResponse userResponse = new UserResponse();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
         if (request.getEmail() != null) {
             user.setEmail(request.getEmail());
         }
@@ -59,13 +62,18 @@ public class UserServiceImpl implements UserService {
         if (request.getLastName() != null) {
             user.setLastName(request.getLastName());
         }
-        if (passwordEncoder.matches(request.getPassword(),user.getPassword())){
-            userRepository.save(user);
-            userResponse.setEmail(request.getEmail());
-            userResponse.setFirstName(request.getFirstName());
-            userResponse.setLastName(request.getLastName());
+
+        // If a new password was provided, encode and set it
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
+        userRepository.save(user);
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.setEmail(user.getEmail());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
         return userResponse;
     }
 
@@ -86,6 +94,7 @@ public class UserServiceImpl implements UserService {
 
         for (User user : users) {
             AdminUserResponse adminUserResponse = new AdminUserResponse();
+            adminUserResponse.setId(user.getId());
             adminUserResponse.setEmail(user.getEmail());
             adminUserResponse.setFirstName(user.getFirstName());
             adminUserResponse.setLastName(user.getLastName());

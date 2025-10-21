@@ -25,14 +25,21 @@ public class UserController {
 
     // PUT /api/v1/users/me
     @PutMapping("/me")
-    public ResponseEntity<AuthenticationResponse> actualizarUser(
+    public ResponseEntity<?> actualizarUser(
             Authentication auth,
             @RequestBody UserRequest request) throws EmailException {
 
         UserResponse actualizado = userService.actualizarUser(auth.getName(), request);
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest(actualizado.getEmail(), request.getPassword());
 
-        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+        // If the user updated the password, return a new auth token so the client can continue
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            AuthenticationRequest authenticationRequest = new AuthenticationRequest(actualizado.getEmail(), request.getPassword());
+            AuthenticationResponse authResp = authenticationService.authenticate(authenticationRequest);
+            return ResponseEntity.ok(authResp);
+        }
+
+        // No password change — return 204 No Content to indicate success without a token
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/me")
