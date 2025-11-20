@@ -37,7 +37,6 @@ public class OrderServiceImpl implements OrderService {
             resp.setEmail(order.getUser().getEmail());
             resp.setDate(order.getDate());
             resp.setTotalPrice(order.getTotalPrice());
-            resp.setAddress(order.getAddress());
 
             java.util.List<OrderDetailResponse> details = new java.util.ArrayList<>();
             for (com.uade.tpo.marketplace.entity.OrderDetail od : order.getOrderDetails()) {
@@ -67,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setDate(dateTime);
-        order.setAddress(orderRequest.getAddress());
+
 
         // Creamos una lista con los items del pedido
         List<OrderDetailRequest> itemList = orderRequest.getItemList();
@@ -124,7 +123,6 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setEmail(user.getEmail());
         orderResponse.setDate(dateTime);
         orderResponse.setTotalPrice(totalPrice);
-        orderResponse.setAddress(orderRequest.getAddress());
         orderResponse.setOrderDetailResponses(itemListResponse);
 
         return orderResponse;

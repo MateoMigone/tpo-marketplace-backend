@@ -24,9 +24,6 @@ public class Order {
     @Column
     private Double totalPrice;
 
-    @Column
-    private String address;
-
     @OneToMany(
             mappedBy = "order",
             cascade = CascadeType.ALL,

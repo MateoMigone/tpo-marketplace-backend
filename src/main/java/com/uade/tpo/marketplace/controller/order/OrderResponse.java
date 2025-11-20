@@ -15,7 +15,5 @@ public class OrderResponse {
 
     private Double totalPrice;
 
-    private String address;
-
     private List<OrderDetailResponse> orderDetailResponses;
 }

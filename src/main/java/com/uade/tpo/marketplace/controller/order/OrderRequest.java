@@ -6,7 +6,5 @@ import java.util.List;
 
 @Data
 public class OrderRequest {
-    private String address;
-
     private List<OrderDetailRequest> itemList;
 }
