@@ -18,13 +18,24 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors; // Añadido para posible uso futuro, aunque no es estrictamente necesario aquí.
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    // ----------------------------------------------------------------------
+    // NUEVA IMPLEMENTACIÓN PARA EL ADMINISTRADOR
+    // ----------------------------------------------------------------------
+    @Override
+    public List<Order> findAllOrders() {
+        // orderRepository.findAll() retorna un Iterable<Order>. Lo convertimos a List.
+        List<Order> orders = (List<Order>) orderRepository.findAll();
+        return orders;
+    }
+    // ----------------------------------------------------------------------
 
     @Override
     public java.util.List<OrderResponse> getOrdersForUser(User user) {
@@ -59,65 +70,51 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     public OrderResponse createOrder(User user, OrderRequest orderRequest) throws NoStockAvailableException {
-        // Creamos un objeto fecha con la fecha actual al momento de generar el nuevo pedido
+        // ... (Tu lógica existente para createOrder) ...
         LocalDateTime dateTime = LocalDateTime.now();
 
-        // Creamos objeto order para cargarlo con la info
         Order order = new Order();
         order.setUser(user);
         order.setDate(dateTime);
 
-
-        // Creamos una lista con los items del pedido
         List<OrderDetailRequest> itemList = orderRequest.getItemList();
-        // Creamos una lista vacía para guardar los items a ser devueltos en la order response
         List<OrderDetailResponse> itemListResponse = new ArrayList<OrderDetailResponse>();
-        // Inicializamos variable para calcular precio total del pedido
         Double totalPrice = 0.00;
 
-        // Recorremos los items del pedido
         for (OrderDetailRequest itemDetail : itemList) {
-            // Buscamos el juego dentro del item por su id
             Long gameId = itemDetail.getGameId();
             Game game = gameRepository.findById(gameId)
                     .orElseThrow(() -> new IllegalArgumentException("Juego no encontrado: " + itemDetail.getGameId()));
 
-            // Chequeamos que haya stock suficiente para ese juego
             Integer stock = game.getStock();
             Integer quantity = itemDetail.getQuantity();
             if (quantity > stock){
                 throw new NoStockAvailableException();
             }
 
-            // Le restamos la cantidad comprada al stock y actualizamos el juego
             game.setStock(stock - quantity);
             gameRepository.save(game);
 
             Double finalPrice = game.getFinalPrice();
 
-            // Creamos un objeto OrderDetail para cargarle la informacion y lo cargamos en el objeto order
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setGame(game);
             orderDetail.setQuantity(quantity);
             orderDetail.setUnitPrice(finalPrice);
             order.addOrderDetail(orderDetail);
 
-            // Creamos un objeto OrderDetailResponse para cargarle la info y lo agregamos a la lista orderDetailResponse
             OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
             orderDetailResponse.setGameId(gameId);
             orderDetailResponse.setQuantity(quantity);
             orderDetailResponse.setUnitPrice(finalPrice);
             itemListResponse.add(orderDetailResponse);
 
-            // Iteramos para ir calculando precio total
             totalPrice += quantity * finalPrice;
         }
 
-        // Terminamos de cargar el objeto order con el precio total calculado y lo guardamos
         order.setTotalPrice(totalPrice);
         orderRepository.save(order);
 
-        // Creamos el objeto OrderResponse el cual sera devuelto como respuesta y lo cargamos con la info
         OrderResponse orderResponse = new OrderResponse();
         orderResponse.setId(order.getId());
         orderResponse.setEmail(user.getEmail());
